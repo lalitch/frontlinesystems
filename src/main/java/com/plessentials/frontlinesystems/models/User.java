@@ -1,28 +1,40 @@
 package com.plessentials.frontlinesystems.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
+import com.plessentials.frontlinesystems.utils.StringUtils;
+
+import java.util.UUID;
 
 @DynamoDBTable(tableName = "users")
 public class User {
     private String id;
-    private String name;
-    private String address;
-    private String number;
 
-    public User(String id, String name, String address, String number) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.number = number;
-    }
+    private String name;
+
+    private String ssn;
+
+    private Address address;
+
+    private Contact contact;
 
     public User() {
     }
 
+    public User(String id) {
+        this.id = id;
+    }
+
     @DynamoDBHashKey
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -32,19 +44,35 @@ public class User {
         this.name = name;
     }
 
-    public String getAddress() {
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.M)
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public String getNumber() {
-        return number;
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.M)
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public void generateIdIfMissing() {
+        if(StringUtils.IsNullEmptyOrBlank(id)) {
+            this.id = UUID.randomUUID().toString();
+        }
     }
 }

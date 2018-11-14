@@ -13,8 +13,8 @@ public class DataProvider<T> {
 
     public DataProvider() {
         BasicAWSCredentials credentials = new BasicAWSCredentials(
-                "AKIAISOULFIOXFGGVJGA",
-                "MDqADx19G4JUW6Z809EXkK5fWaQ4kSlVW+uBukMn");
+                "AKIAI7D5WM5VV6UH7JJQ",
+                "fOlnYrzgOLu1hPWb9SYx3sixYqKTK1Z5q4kzRAmG");
 
         this.dynamoDBClient = AmazonDynamoDBClientBuilder
                 .standard()
