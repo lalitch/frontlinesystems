@@ -3,9 +3,9 @@ package com.plessentials.frontlinesystems.controllers;
 import com.plessentials.frontlinesystems.dataproviders.DynamoDBDataProvider;
 import com.plessentials.frontlinesystems.dataproviders.IDataProvider;
 import com.plessentials.frontlinesystems.models.User;
-import com.plessentials.frontlinesystems.utils.RestClient;
 import com.plessentials.frontlinesystems.utils.Validations;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
@@ -41,8 +41,11 @@ public class UsersController {
 
     @GetMapping("/test")
     public User test() {
-        RestClient<User> client = new RestClient<>(User.class);
-        return client.get(URI.create("https://putsreq.com/kow1qydD9w4HiQjkNTzl"));
+        RestTemplate restTemplate = new RestTemplate();
+
+        return restTemplate.getForObject(
+                URI.create("http://putsreq.com/kow1qydD9w4HiQjkNTzl"),
+                User.class);
     }
 }
 

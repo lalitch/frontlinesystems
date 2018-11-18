@@ -24,6 +24,28 @@ public class RestClient<T> {
                 .GET()
                 .build();
 
+        return this.send(request);
+    }
+
+    public T put(URI requestUri, T body) {
+        HttpRequest request = HttpRequest
+                .newBuilder(requestUri)
+                .PUT(HttpRequest.BodyPublishers.ofString(JsonUtils.serialize(body)))
+                .build();
+
+        return this.send(request);
+    }
+
+    public T post(URI requestUri, T body) {
+        HttpRequest request = HttpRequest
+                .newBuilder(requestUri)
+                .POST(HttpRequest.BodyPublishers.ofString(JsonUtils.serialize(body)))
+                .build();
+
+        return this.send(request);
+    }
+
+    private T send(HttpRequest request) {
         try {
             HttpResponse<String> response = this.httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -32,7 +54,7 @@ public class RestClient<T> {
                 throw new ErrorResponseException(HttpStatus.valueOf(response.statusCode()), response.body());
             }
 
-            return (T)JsonUtils.parseToObject(response.body(), this.tClass);
+            return (T)JsonUtils.deserialize(response.body(), this.tClass);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
