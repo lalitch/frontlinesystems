@@ -1,17 +1,21 @@
 package com.plessentials.frontlinesystems.controllers;
 
-import com.plessentials.frontlinesystems.dataproviders.DataProvider;
+import com.plessentials.frontlinesystems.dataproviders.DynamoDBDataProvider;
+import com.plessentials.frontlinesystems.dataproviders.IDataProvider;
 import com.plessentials.frontlinesystems.models.User;
+import com.plessentials.frontlinesystems.utils.RestClient;
 import com.plessentials.frontlinesystems.utils.Validations;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/users")
 public class UsersController {
-    private DataProvider<User> userDataProvider;
+    private IDataProvider<User> userDataProvider;
 
     public UsersController() {
-        this.userDataProvider = new DataProvider<>();
+        this.userDataProvider = new DynamoDBDataProvider<>(User.class);
     }
 
     @PostMapping()
@@ -25,7 +29,7 @@ public class UsersController {
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable String id) {
-        return this.userDataProvider.get(User.class, id);
+        return this.userDataProvider.get(id);
     }
 
     @DeleteMapping("/{id}")
@@ -34,4 +38,11 @@ public class UsersController {
 
         this.userDataProvider.delete(user);
     }
+
+    @GetMapping("/test")
+    public User test() {
+        RestClient<User> client = new RestClient<>(User.class);
+        return client.get(URI.create("https://putsreq.com/kow1qydD9w4HiQjkNTzl"));
+    }
 }
+

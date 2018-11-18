@@ -7,11 +7,12 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
-public class DataProvider<T> {
-    AmazonDynamoDB dynamoDBClient;
-    DynamoDBMapper dynamoDBMapper;
+public class DynamoDBDataProvider<T> implements IDataProvider<T> {
+    private AmazonDynamoDB dynamoDBClient;
+    private DynamoDBMapper dynamoDBMapper;
+    private Class<? extends T> tClass;
 
-    public DataProvider() {
+    public DynamoDBDataProvider(Class<? extends T> tClass) {
         BasicAWSCredentials credentials = new BasicAWSCredentials(
                 "",
                 "");
@@ -23,6 +24,8 @@ public class DataProvider<T> {
                 .build();
 
         this.dynamoDBMapper = new DynamoDBMapper(this.dynamoDBClient);
+
+        this.tClass = tClass;
     }
 
     public void save(T data) {
@@ -33,7 +36,7 @@ public class DataProvider<T> {
         this.dynamoDBMapper.delete(data);
     }
 
-    public T get(Class<T> tClass, String id) {
-        return this.dynamoDBMapper.load(tClass, id);
+    public T get(String id) {
+        return this.dynamoDBMapper.load(this.tClass, id);
     }
 }
