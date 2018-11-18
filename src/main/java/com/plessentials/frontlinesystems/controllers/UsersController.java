@@ -3,7 +3,12 @@ package com.plessentials.frontlinesystems.controllers;
 import com.plessentials.frontlinesystems.dataproviders.DynamoDBDataProvider;
 import com.plessentials.frontlinesystems.dataproviders.IDataProvider;
 import com.plessentials.frontlinesystems.models.User;
+import com.plessentials.frontlinesystems.utils.RestClient;
 import com.plessentials.frontlinesystems.utils.Validations;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,11 +46,8 @@ public class UsersController {
 
     @GetMapping("/test")
     public User test() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        return restTemplate.getForObject(
-                URI.create("http://putsreq.com/kow1qydD9w4HiQjkNTzl"),
-                User.class);
+        RestClient<User> restClient = new RestClient<User>(User.class);
+        return restClient.get(URI.create("https://putsreq.com/kow1qydD9w4HiQjkNTzl"));
     }
 }
 
