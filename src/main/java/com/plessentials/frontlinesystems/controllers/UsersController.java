@@ -13,7 +13,7 @@ public class UsersController {
     private IDataProvider<User> userDataProvider;
 
     public UsersController() {
-        // this.userDataProvider = new DynamoDBDataProvider<>(User.class);
+        this.userDataProvider = new DynamoDBDataProvider<>(User.class);
     }
 
     @PostMapping()
@@ -33,7 +33,6 @@ public class UsersController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable String id) {
         User user = new User(id);
-
         this.userDataProvider.delete(user);
     }
 }

@@ -6,6 +6,10 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DynamoDBDataProvider<T> implements IDataProvider<T> {
     private AmazonDynamoDB dynamoDBClient;
@@ -20,7 +24,7 @@ public class DynamoDBDataProvider<T> implements IDataProvider<T> {
         this.dynamoDBClient = AmazonDynamoDBClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(Regions.US_EAST_1)
+                .withRegion(Regions.US_WEST_1)
                 .build();
 
         this.dynamoDBMapper = new DynamoDBMapper(this.dynamoDBClient);
@@ -38,5 +42,23 @@ public class DynamoDBDataProvider<T> implements IDataProvider<T> {
 
     public T get(String id) {
         return this.dynamoDBMapper.load(this.tClass, id);
+    }
+
+    public List<T> listAndDelete(int count)
+    {
+        var dynamoDBScanExpression = new DynamoDBScanExpression();
+        var dbResult = this.dynamoDBMapper.scan(this.tClass, dynamoDBScanExpression);
+
+        var result = new ArrayList<T>();
+
+        for(var item: dbResult)
+        {
+            if(result.size() >= 2)
+                break;
+
+            result.add(item);
+        }
+
+        return result;
     }
 }
