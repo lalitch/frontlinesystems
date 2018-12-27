@@ -13,13 +13,15 @@ public class UsersController {
     private IDataProvider<User> userDataProvider;
 
     public UsersController() {
-        // this.userDataProvider = new DynamoDBDataProvider<>(User.class);
+        this.userDataProvider = new DynamoDBDataProvider<>(User.class);
     }
 
     @PostMapping()
     public User addUser(@RequestBody User user) {
         Validations.validateUser(user);
+
         user.generateIdIfMissing();
+
         this.userDataProvider.save(user);
 
         return user;

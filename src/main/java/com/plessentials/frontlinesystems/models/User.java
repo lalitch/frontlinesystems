@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 import com.plessentials.frontlinesystems.utils.StringUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 @DynamoDBTable(tableName = "users")
@@ -19,6 +20,8 @@ public class User {
     private Address address;
 
     private Contact contact;
+
+    private List<Line> lines;
 
     public User() {
     }
@@ -68,6 +71,14 @@ public class User {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public List<Line> getLines() {
+        return lines;
+    }
+
+    public void setLines(List<Line> lines) {
+        this.lines = lines;
     }
 
     public void generateIdIfMissing() {
