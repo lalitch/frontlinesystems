@@ -29,6 +29,6 @@ public class AvailableNumbersCacheProvider {
         if(this.availableNumbers.size() > 0)
             return;
 
-        this.availableNumbers = this.availableNumbersDataProvider.listAndDelete(2);
+        this.availableNumbers = this.availableNumbersDataProvider.listAndDelete(10);
     }
 }

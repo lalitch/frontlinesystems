@@ -19,9 +19,7 @@ public class UsersController {
     @PostMapping()
     public User addUser(@RequestBody User user) {
         Validations.validateUser(user);
-
         user.generateIdIfMissing();
-
         this.userDataProvider.save(user);
 
         return user;
@@ -35,7 +33,6 @@ public class UsersController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable String id) {
         User user = new User(id);
-
         this.userDataProvider.delete(user);
     }
 }
