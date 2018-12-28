@@ -5,6 +5,7 @@ import com.plessentials.frontlinesystems.dataproviders.DynamoDBDataProvider;
 import com.plessentials.frontlinesystems.dataproviders.IDataProvider;
 import com.plessentials.frontlinesystems.models.Line;
 import com.plessentials.frontlinesystems.models.User;
+import com.plessentials.frontlinesystems.utils.Validations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ public class LinesController {
     @PostMapping("users/{userId}/lines")
     public Line addLine(@PathVariable String userId, @RequestBody Line line)
     {
+        Validations.validateLine(line);
+        Validations.validateUserId(userId);
+
         var user = this.usersDataProvider.get(userId);
         var availablenumber = this.availableNumbersCacheProvider.getAvailableNumber();
         line.setNumber(availablenumber);
