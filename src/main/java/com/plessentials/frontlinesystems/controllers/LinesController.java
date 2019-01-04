@@ -6,6 +6,7 @@ import com.plessentials.frontlinesystems.dataproviders.IDataProvider;
 import com.plessentials.frontlinesystems.models.Line;
 import com.plessentials.frontlinesystems.models.User;
 import com.plessentials.frontlinesystems.utils.Validations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,9 +16,10 @@ public class LinesController {
     private AvailableNumbersCacheProvider availableNumbersCacheProvider;
     private IDataProvider<User> usersDataProvider;
 
-    public LinesController() {
-        this.availableNumbersCacheProvider = new AvailableNumbersCacheProvider();
-        this.usersDataProvider = new DynamoDBDataProvider<>(User.class);
+    @Autowired
+    public LinesController(AvailableNumbersCacheProvider availableNumbersCacheProvider, IDataProvider<User> usersDataProvider) {
+        this.availableNumbersCacheProvider = availableNumbersCacheProvider;
+        this.usersDataProvider = usersDataProvider;
     }
 
     @PostMapping("users/{userId}/lines")
